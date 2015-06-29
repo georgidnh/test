@@ -1,0 +1,74 @@
+#!/bin/sh
+
+#	creating the counter
+#	reading from a file and countering well
+
+#	checking if the file exists
+file="./fileName"
+if [ -f "$file" ]
+then
+	echo "$file found."
+else
+	echo "not found"
+fi
+
+#	reading the counter from the file if the minute is the same
+savefile=$(cat ./fileName)
+currentcounter=`echo $savefile|cut -c10-12`  ##getcurrentcounter
+echo  "current counter:" $currentcounter
+
+#	cutting zeroes
+currentcounter=$(echo $currentcounter | sed 's/^0*//')
+
+#	reading the old minutes from the file readfrom
+#newminutes=$(cat ./readfrom)
+#echo $newminutes
+
+#	reading from the file new minutes
+savefile=$(cat ./fileName)
+getcurrentMinutes=`echo $savefile|cut -c4-5`  ##getcurrentMinutes
+echo "current minutes:" $getcurrentMinutes
+#newminutes=`echo $savefile|cut -c4-5`  ##new minutes
+
+#echo "new minutes" $newminutes
+
+#	creating a varialble the data	
+#	datavariable=$(date +"%T")
+#	echo "Current time : $datavariable"
+
+#	getting the day and time
+currentday=$(date +"%T")
+echo "the time is:" $currentday
+
+#	taking the currentminutes to a variable
+#getcurrentMinutes=`echo $currentday|cut -c4-5`  ##getcurrentMinutes
+#echo "The minutes are: " $getcurrentMinutes
+
+#	new minutes
+getnewMinutes=${currentday:3:2}
+echo "New minutes:" $getnewMinutes
+
+#	comparing currentminutes with new minutes
+if [ $getcurrentMinutes == $getnewMinutes ];
+then
+   currentcounter=$((currentcounter+1))
+else
+	currentcounter="0"  ##currentcounter == null
+fi
+
+#	making the counter 001, 002 and not like 1,2
+#finalcounter="0"$currentcounter
+
+finalcounter=$(printf "%03d" $currentcounter)
+#finalcounter=$currentcounter
+echo "The counter that will be saved:" $finalcounter
+
+#	counter
+
+#	creating variable which will be saved in the file
+savefile="$currentday.$finalcounter";
+echo $savefile
+
+#	saving the things into the files
+echo $savefile 	> fileName
+#echo $getcurrentMinutes > readfrom
